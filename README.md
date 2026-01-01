@@ -66,3 +66,74 @@ python manage.py createsuperuser
 
 # اجرای سرور توسعه
 python manage.py runserver
+
+
+
+
+
+
+# 📝 SEO-Friendly Blog Project
+
+[![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/Django-4.3-green?logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+
+This project is a **modern, SEO-friendly blog** designed to be easily optimized for search engines.  
+The structure is clean, scalable, and suitable for real-world projects.
+
+---
+
+## 🚀 Features
+
+- ✅ SEO-friendly structure
+- ✅ Clean and standard URLs
+- ✅ Ability to add meta tags (title, description)
+- ✅ Ready for customization and extension
+- ✅ Clean and maintainable architecture
+- ✅ Suitable for personal or professional blogs
+
+---
+
+## 🧠 SEO Considerations
+
+- Proper page structure
+- Ability to define Meta Title and Meta Description
+- Indexable content for search engines
+- Ready for Sitemap and Robots.txt
+- Proper internal linking structure
+
+---
+
+## 🛠 Technologies Used
+
+- Backend: Django / Django Rest Framework
+- Database: SQLite / PostgreSQL
+- Authentication: JWT
+- Frontend: HTML, CSS, JavaScript (Optional: React/Vue)
+- Version Control: Git & GitHub
+- SEO Tools: Django SEO Framework, Meta Tags
+
+---
+
+## ⚙️ Installation & Setup
+
+```bash
+git clone git@github.com:melikatavakoli/blog.git
+cd blog
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Linux / Mac
+venv\Scripts\activate     # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Apply migrations
+python manage.py migrate
+
+# Create superuser for admin
+python manage.py createsuperuser
+
+# Run development server
+python manage.py runserver
