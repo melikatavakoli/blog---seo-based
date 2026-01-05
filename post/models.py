@@ -88,6 +88,7 @@ class Tag(models.Model):
         blank=True,
         allow_unicode=True
     )
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name = "tag"
@@ -98,6 +99,11 @@ class Tag(models.Model):
     def __str__(self):
         return self.title or "none"
 
+    def save(self, *args, **kwargs):
+        if not self.slug and self.title:
+            self.slug = slugify(self.title, allow_unicode=True)
+        super().save(*args, **kwargs)
+    
 # =========================================================================================================
 # ====================== Category MODEL
 # =========================================================================================================

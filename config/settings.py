@@ -119,23 +119,3 @@ SPECTACULAR_SETTINGS = {
     'ENUM_NAME_OVERRIDES': {},
     'TAG_SORTING': 'alpha',  # Sort tags alphabetically
 }
-
-ENVIRONMENT = os.getenv("ENVIRONMENT")
-# Allowed hosts
-if ENVIRONMENT == "development":
-
-    print(ENVIRONMENT)
-    DEBUG = True
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
-    ALLOWED_EXPORT_IPS = os.environ.get("ALLOWED_EXPORT_HOSTS", default='').split(",")
-    ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
-    ALLOWED_USER = os.environ.get("ALLOWED_USER", default='')
-    SECRET_KEY_API = os.getenv("SECRET_KEY_API", "fallback-secret-key")
-    CORS_ALLOW_ALL_ORIGINS = False  # Explicitly disable
-    CORS_ALLOWED_ORIGINS = [
-
-    ]
-    CSRF_TRUSTED_ORIGINS = [
-
-    ]
