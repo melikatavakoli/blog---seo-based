@@ -62,7 +62,8 @@ class TagsSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "title",
-            "slug"
+            "slug",
+            "description"
         ]
 
     def create(self, validated_data):
@@ -85,6 +86,7 @@ class PostSerializer(serializers.ModelSerializer):
             "id",
             'category_title',
             "title",
+            'is_published',
             "image",
             "description",
             "body",
@@ -135,6 +137,7 @@ class ListPostSerializer(serializers.ModelSerializer):
             "description",
             "slug",
             "tags",
+            'is_published',
             "created_by",
             'created_at',
             "meta_title",
@@ -174,6 +177,7 @@ class PostCreateUpdateSerializer(serializers.ModelSerializer):
             "category",
             "slug",
             "body",
+            'is_published',
             "tags",
             "meta_title",
             "meta_description",
