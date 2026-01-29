@@ -35,8 +35,6 @@ This project takes SEO seriously and provides a strong base for further optimiza
 - **Backend:** Django / Django REST Framework
 - **Database:** SQLite (development) / PostgreSQL (production)
 - **Authentication:** JWT
-- **Frontend:** HTML, CSS, JavaScript  
-  *(Optional: React or Vue can be added easily)*
 - **Version Control:** Git & GitHub
 - **SEO Tools:** Django SEO utilities, Meta Tags
 
