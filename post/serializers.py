@@ -1,88 +1,95 @@
 from rest_framework import serializers
-from .models import Media, Post, ContactMessage, Redirect, Schema, Tag, Category
+from common.base import GenericModelSerializer
+from .models import (
+    Media, 
+    Post, 
+    ContactMessage, 
+    Redirect, 
+    Schema, 
+    Tag,
+    Category
+    )
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 import re
 User=get_user_model()
 
-
-
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(GenericModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username']
+        fields = GenericModelSerializer.Meta.fields + (
+            'id', 
+            'username'
+            )
 
-
-# =========================================================================================================
-# ====================== Media Serializer
-# =========================================================================================================
-class MediaSerializer(serializers.ModelSerializer):
+class MediaSerializer(GenericModelSerializer):
     class Meta:
         model = Media
-        fields = [
+        fields = GenericModelSerializer.Meta.fields + (
             "id",
             "image",
             "created_at",
             "meta_og_image",
-        ]
-# =========================================================================================================
-# ====================== Post Serializer
-# =========================================================================================================
-class CategorySerializer(serializers.ModelSerializer):
+        )
+
+class CategorySerializer(GenericModelSerializer):
     slug = serializers.SlugField(read_only=True)
 
     class Meta:
         model = Category
-        fields = [
+        fields = GenericModelSerializer.Meta.fields + (
             'id',
             'title',
             'slug'
-        ]
+        )
 
     def create(self, validated_data):
         validated_data['slug'] = slugify(validated_data['title'])
         return super().create(validated_data)
 
-# =========================================================================================================
-# ====================== Schema Serializer
-# =========================================================================================================
-class SchemaSerializer(serializers.ModelSerializer):
+class SchemaSerializer(GenericModelSerializer):
     class Meta:
         model = Schema
-        fields = ["id", "content", "created_at", "post"]
+        fields = GenericModelSerializer.Meta.fields + (
+            "id", 
+            "content",
+            "post"
+            )
 
-# =========================================================================================================
-# ====================== Tags Serializer
-# =========================================================================================================
-class TagsSerializer(serializers.ModelSerializer):
+class TagsSerializer(GenericModelSerializer):
     slug = serializers.SlugField(read_only=True)
 
     class Meta:
         model=Tag
-        fields = [
+        fields = GenericModelSerializer.Meta.fields + (
             "id",
             "title",
             "slug",
             "description"
-        ]
+        )
 
     def create(self, validated_data):
         validated_data['slug'] = slugify(validated_data['title'])
         return super().create(validated_data)
     
-# =========================================================================================================
-# ====================== Post Serializer
-# =========================================================================================================
-class PostSerializer(serializers.ModelSerializer):
-    category_title = serializers.CharField(source='category.title', read_only=True)
-    tags = serializers.CharField(source='tag.title', read_only=True)
-    created_by = serializers.CharField(source="created_by.username", read_only=True)
-    schema_items = SchemaSerializer(many=True, read_only=True)
+class PostSerializer(GenericModelSerializer):
+    category_title = serializers.CharField(
+        source='category.title',
+        read_only=True
+        )
+    tags = serializers.CharField(
+        source='tag.title', 
+        read_only=True
+        )
+    schema_items = SchemaSerializer(
+        many=True, 
+        read_only=True
+        )
     image = MediaSerializer(read_only=True)
 
     class Meta:
         model = Post
-        fields = [
+        fields = GenericModelSerializer.Meta.fields + (
             "id",
             'category_title',
             "title",
@@ -93,7 +100,6 @@ class PostSerializer(serializers.ModelSerializer):
             'slug',
             'body',
             'tags',
-            'created_by',
             'meta_title',
             'meta_description',
             'meta_keywords',
@@ -102,7 +108,7 @@ class PostSerializer(serializers.ModelSerializer):
             'follow',
             "schema_items",
             "alt"
-        ]
+        )
 
     def create(self, validated_data):
         validated_data['slug'] = slugify(validated_data['title'], allow_unicode=True)
@@ -116,16 +122,20 @@ class PostSerializer(serializers.ModelSerializer):
         
         return super().create(validated_data)
     
-# =========================================================================================================
-# ====================== List Post Serializer
-# =========================================================================================================
-class ListPostSerializer(serializers.ModelSerializer):
-    category_title = serializers.CharField(source='category.title', read_only=True)
-    tags = serializers.CharField(source='tag.title', read_only=True)
-    created_by = serializers.CharField(source="created_by.username", read_only=True)
-    schema_items = SchemaSerializer(many=True, read_only=True)
-    image = MediaSerializer(read_only=True)
-    # created_by = UserSerializer(read_only=True)  
+class ListPostSerializer(GenericModelSerializer):
+    category_title = serializers.CharField(
+        source='category.title',
+        read_only=True
+        )
+    tags = serializers.CharField(
+        source='tag.title', 
+        read_only=True
+        )
+    schema_items = SchemaSerializer(
+        many=True, 
+        read_only=True
+        )
+    image = MediaSerializer(read_only=True)  
 
     class Meta:
         model = Post
@@ -138,8 +148,6 @@ class ListPostSerializer(serializers.ModelSerializer):
             "slug",
             "tags",
             'is_published',
-            "created_by",
-            'created_at',
             "meta_title",
             "meta_description",
             "meta_keywords",
@@ -150,11 +158,10 @@ class ListPostSerializer(serializers.ModelSerializer):
             "alt",
         ]
 
-# =========================================================================================================
-# ====================== Post Create Update Serializer
-# =========================================================================================================
-class PostCreateUpdateSerializer(serializers.ModelSerializer):
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+class PostCreateUpdateSerializer(GenericModelSerializer):
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all()
+        )
     schema_items = serializers.PrimaryKeyRelatedField(
         queryset=Schema.objects.all(),
         many=True,
@@ -165,11 +172,15 @@ class PostCreateUpdateSerializer(serializers.ModelSerializer):
         many=True,
         required=False
     )
-    image = serializers.PrimaryKeyRelatedField(queryset=Media.objects.all(), required=False, allow_null=True)
+    image = serializers.PrimaryKeyRelatedField(
+        queryset=Media.objects.all(), 
+        required=False,
+        allow_null=True
+        )
 
     class Meta:
         model = Post
-        fields = [
+        fields = GenericModelSerializer.Meta.fields + (
             "id",
             "title",
             "image",
@@ -187,7 +198,7 @@ class PostCreateUpdateSerializer(serializers.ModelSerializer):
             "schema_items",
             'follow',
             "alt"
-        ]
+        )
 
     def create(self, validated_data):
         tags = validated_data.pop("tags", [])
@@ -212,9 +223,6 @@ class PostCreateUpdateSerializer(serializers.ModelSerializer):
             schema.save()
         return post
 
-# =========================================================================================================
-# ====================== Redirect Serializer
-# =========================================================================================================
 class RedirectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Redirect
@@ -225,19 +233,15 @@ class RedirectSerializer(serializers.ModelSerializer):
             "status",
         ]
 
-# =========================================================================================================
-# ====================== Detail Post Serializer
-# =========================================================================================================
-class DetailPostSerializer(serializers.ModelSerializer):
+class DetailPostSerializer(GenericModelSerializer):
     category = CategorySerializer(read_only=True)
     tags = TagsSerializer(many=True, read_only=True)
-    created_by = serializers.CharField(source="created_by.username", read_only=True)
     schema_items = SchemaSerializer(many=True, read_only=True)
     image = MediaSerializer(read_only=True)
 
     class Meta:
         model = Post
-        fields = [
+        fields = GenericModelSerializer.Meta.fields + (
             "id",
             'category',
             "title",
@@ -247,7 +251,6 @@ class DetailPostSerializer(serializers.ModelSerializer):
             'slug',
             'body',
             'tags',
-            'created_by',
             'meta_title',
             'meta_description',
             'meta_keywords',
@@ -256,22 +259,18 @@ class DetailPostSerializer(serializers.ModelSerializer):
             'follow',
             "schema_items",
             "alt"
-        ]
+        )
 
-# =========================================================================================================
-# ====================== Contact Message -- create / Serializer
-# =========================================================================================================
-class ContactMessageCreateSerializer(serializers.ModelSerializer):
-
+class ContactMessageCreateSerializer(GenericModelSerializer):
     class Meta:
         model= ContactMessage
-        fields=[
+        fields= GenericModelSerializer.Meta.fields + (
             'id',
             'name',
             'mobile',
             'work_field',
             'company_name'
-        ]
+        )
 
     def validate(self, data):
         mobile = data.get('mobile')

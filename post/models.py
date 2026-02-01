@@ -2,14 +2,10 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 from django.shortcuts import reverse
-from uuid import uuid4
-
 from common.base import GenericModel
 User=get_user_model()
 
-# =========================================================================================================
-# ====================== Contact Message MODEL
-# =========================================================================================================
+
 class ContactMessage(GenericModel):
     name=models.CharField(
         "name",
@@ -48,9 +44,7 @@ class ContactMessage(GenericModel):
     def __str__(self):
         return self.name or "none"
 
-# =========================================================================================================
-# ====================== Tag MODEL
-# =========================================================================================================
+
 class Tag(GenericModel):
     title=models.CharField(
         "title",
@@ -81,9 +75,7 @@ class Tag(GenericModel):
             self.slug = slugify(self.title, allow_unicode=True)
         super().save(*args, **kwargs)
     
-# =========================================================================================================
-# ====================== Category MODEL
-# =========================================================================================================
+    
 class Category(GenericModel):
     title=models.CharField(max_length=100)
     slug=models.SlugField(
@@ -108,9 +100,7 @@ class Category(GenericModel):
     def __str__(self):
         return self.title or "none"
 
-# =========================================================================================================
-# ====================== Media MODEL
-# =========================================================================================================
+
 class Media(GenericModel):
     image = models.ImageField(
         "image",
@@ -134,9 +124,7 @@ class Media(GenericModel):
     def __str__(self):
         return self.image.name if self.image else str(self.id)
     
-# =========================================================================================================
-# ====================== Post MODEL
-# =========================================================================================================
+
 class Post(GenericModel):
     slug = models.SlugField(
         "slug",
@@ -249,9 +237,7 @@ class Post(GenericModel):
     def get_absolute_url(self):
         return reverse("post_detail", kwargs={"pk": self.pk})
 
-# =========================================================================================================
-# ====================== Redirect
-# =========================================================================================================
+
 class Redirect(GenericModel):
     origin = models.CharField(
         "origin",
@@ -281,9 +267,7 @@ class Redirect(GenericModel):
     def __str__(self):
         return str(self.id) if self.id else 'none'
     
-# =========================================================================================================
-# ====================== Schema
-# =========================================================================================================
+    
 class Schema(GenericModel):
     post = models.ForeignKey(
         Post,
