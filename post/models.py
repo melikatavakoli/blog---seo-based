@@ -3,19 +3,14 @@ from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 from django.shortcuts import reverse
 from uuid import uuid4
+
+from common.base import GenericModel
 User=get_user_model()
 
 # =========================================================================================================
 # ====================== Contact Message MODEL
 # =========================================================================================================
-class ContactMessage(models.Model):
-    id = models.UUIDField(
-        verbose_name="unique id",
-        primary_key=True,
-        unique=True,
-        default=uuid4,
-        editable=False
-    )
+class ContactMessage(GenericModel):
     name=models.CharField(
         "name",
         max_length=100,
@@ -43,17 +38,6 @@ class ContactMessage(models.Model):
         null=True,
         blank=True
     )
-    created_at=models.DateTimeField(
-        "created_at",
-        auto_now=True,
-    )
-    created_by = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="%(app_label)s_%(class)s_created_by"
-    )
 
     class Meta:
         verbose_name = "contact us"
@@ -67,14 +51,7 @@ class ContactMessage(models.Model):
 # =========================================================================================================
 # ====================== Tag MODEL
 # =========================================================================================================
-class Tag(models.Model):
-    id = models.UUIDField(
-        verbose_name="unique id",
-        primary_key=True,
-        unique=True,
-        default=uuid4,
-        editable=False
-    )
+class Tag(GenericModel):
     title=models.CharField(
         "title",
         max_length=100,
@@ -107,14 +84,7 @@ class Tag(models.Model):
 # =========================================================================================================
 # ====================== Category MODEL
 # =========================================================================================================
-class Category(models.Model):
-    id = models.UUIDField(
-        verbose_name="unique id",
-        primary_key=True,
-        unique=True,
-        default=uuid4,
-        editable=False
-    )
+class Category(GenericModel):
     title=models.CharField(max_length=100)
     slug=models.SlugField(
         "slug",
@@ -141,14 +111,7 @@ class Category(models.Model):
 # =========================================================================================================
 # ====================== Media MODEL
 # =========================================================================================================
-class Media(models.Model):
-    id = models.UUIDField(
-        verbose_name="unique id",
-        primary_key=True,
-        unique=True,
-        default=uuid4,
-        editable=False
-    )
+class Media(GenericModel):
     image = models.ImageField(
         "image",
         upload_to='media',
@@ -161,17 +124,12 @@ class Media(models.Model):
         null=True,
         blank=True
     )
-    created_at = models.DateTimeField(
-        auto_now=False,
-        auto_now_add=True,
-        verbose_name='Created At',
-    )
 
     class Meta:
         verbose_name = "media"
         verbose_name_plural = "media"
         db_table = 'media'
-        ordering=["-created_at"]
+        # ordering=["-created_at"]
 
     def __str__(self):
         return self.image.name if self.image else str(self.id)
@@ -179,14 +137,7 @@ class Media(models.Model):
 # =========================================================================================================
 # ====================== Post MODEL
 # =========================================================================================================
-class Post(models.Model):
-    id = models.UUIDField(
-        verbose_name="unique id",
-        primary_key=True,
-        unique=True,
-        default=uuid4,
-        editable=False
-    )
+class Post(GenericModel):
     slug = models.SlugField(
         "slug",
         unique=True,
@@ -217,16 +168,6 @@ class Post(models.Model):
         related_name='%(app_label)s_%(class)s_tags',
         verbose_name='Tags',
     )
-    created_at = models.DateTimeField(
-        auto_now=False,
-        auto_now_add=True,
-        verbose_name='Created At',
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        auto_now_add=False,
-        verbose_name='Updated At',
-    )
     image = models.ForeignKey(
         Media,
         on_delete=models.CASCADE,
@@ -235,12 +176,6 @@ class Post(models.Model):
     )
     is_published = models.BooleanField(
         default=True
-    )
-    created_by = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
     )
     category = models.ForeignKey(
         Category,
@@ -289,7 +224,7 @@ class Post(models.Model):
         verbose_name = "post"
         verbose_name_plural = "posts"
         db_table = 'post'
-        ordering=["-created_at"]
+        # ordering=["-created_at"]
 
     def __str__(self):
         return self.title or 'Untitled Post'
@@ -317,14 +252,7 @@ class Post(models.Model):
 # =========================================================================================================
 # ====================== Redirect
 # =========================================================================================================
-class Redirect(models.Model):
-    id = models.UUIDField(
-        verbose_name="unique id",
-        primary_key=True,
-        unique=True,
-        default=uuid4,
-        editable=False
-    )
+class Redirect(GenericModel):
     origin = models.CharField(
         "origin",
         max_length=1000,
@@ -356,14 +284,7 @@ class Redirect(models.Model):
 # =========================================================================================================
 # ====================== Schema
 # =========================================================================================================
-class Schema(models.Model):
-    id = models.UUIDField(
-        verbose_name="unique id",
-        primary_key=True,
-        unique=True,
-        default=uuid4,
-        editable=False
-    )
+class Schema(GenericModel):
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
@@ -372,7 +293,6 @@ class Schema(models.Model):
         blank=True,
     )
     content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "schema"
