@@ -54,17 +54,19 @@ TEMPLATES = [
         },
     },
 ]
+
 #---------------------------------------------
 WSGI_APPLICATION = 'config.wsgi.application'
 #---------------------------------------------
 # Database
 DATABASES = {
     'default': {
-        'NAME': os.getenv("POSTGRES_DB"),
-        'USER': os.getenv("POSTGRES_USER"),
-        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
-        'HOST': os.getenv("POSTGRES_HOST"),
-        'PORT': os.getenv("POSTGRES_PORT"),
+        'ENGINE': 'django.db.backends.postgresql', 
+        'NAME': os.getenv("DB_NAME"),
+        'USER': os.getenv("DB_USER"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("DB_HOST"),
+        'PORT': os.getenv("DB_PORT"),
     }
 }
 #---------------------------------------------
@@ -83,7 +85,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-# REST Framework Configuration
+
 # REST Framework Configuration
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
@@ -107,8 +109,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #SWAGGER
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'FioTriX API Documentation',
-    'DESCRIPTION': 'API documentation for fiotrix-website',
+    'TITLE': 'My-Blog API Documentation',
+    'DESCRIPTION': 'API documentation for my-blog',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': True,
     'SWAGGER_UI_SETTINGS': {
@@ -119,3 +121,7 @@ SPECTACULAR_SETTINGS = {
     'ENUM_NAME_OVERRIDES': {},
     'TAG_SORTING': 'alpha',  # Sort tags alphabetically
 }
+
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://localhost").split(",")
+DEBUG = os.getenv("DEBUG", "False") == "True"
